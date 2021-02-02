@@ -56,7 +56,6 @@ window.addEventListener('DOMContentLoaded', () => {
         htmlHours.textContent = drawZero(timeLeft.hours);
         htmlMinutes.textContent = drawZero(timeLeft.minutes);
         htmlSeconds.textContent = drawZero(timeLeft.seconds);
-        console.log('clock');
     };
 
     const drawZero = num => num < 10 ? `0${num}` : num;
@@ -90,5 +89,35 @@ window.addEventListener('DOMContentLoaded', () => {
     headerLinks[1].addEventListener('click', (e) => {
         e.preventDefault();
         smoothScroll(menu, 10);
+    });
+
+    //Modal
+    const modalBtns = document.querySelectorAll('[data-modal]'),
+        modal = document.querySelector('.modal'),
+        modalContent = modal.querySelector('.modal__content'),
+        modalClose  = document.querySelector('.modal__close');
+    
+    const showModal = () => {
+        modal.classList.add('show');
+        modal.classList.remove('hide');
+        document.body.style.overflow = 'hidden';
+    };
+    const closeModal = () => {
+        modal.classList.remove('show');
+        modal.classList.add('hide');
+        document.body.style.overflow = '';
+    };
+
+    modalBtns.forEach(btn => btn.addEventListener('click', showModal));
+    modalClose.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeModal();
+        } 
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.code === 'Escape' && modal.classList.contains('show')) {
+            closeModal();
+        }
     });
 });
