@@ -108,6 +108,8 @@ window.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = '';
     };
 
+    const modalTimerId = setTimeout(showModal, 15000);
+    
     modalBtns.forEach(btn => btn.addEventListener('click', showModal));
     modalClose.addEventListener('click', closeModal);
     modal.addEventListener('click', (e) => {
