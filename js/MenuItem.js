@@ -1,10 +1,11 @@
 class MenuItem {
-    constructor(img, alt, subtitle, descr, price, parentSelector) {
+    constructor(img, alt, subtitle, descr, price, parentSelector, ...classes) {
         this.img = img;
         this.alt = alt;
         this.subtitle = subtitle;
         this.descr = descr;
         this.price = price;
+        this.classes = classes;
         this.transfer = 70;
         this.parent = document.querySelector(parentSelector);
     }
@@ -15,8 +16,14 @@ class MenuItem {
 
     render() {
         const element = document.createElement('div');
+        
+        if (this.classes.length === 0) {
+            element.classList.add('menu__item');
+        } else {
+            this.classes.forEach(item => element.classList.add(item));
+        }
+
         element.innerHTML = `
-        <div class="menu__item">
             <img src=${this.img} alt=${this.alt}>
             <h3 class="menu__item-subtitle">${this.subtitle}</h3>
             <div class="menu__item-descr">${this.descr}</div>
@@ -25,7 +32,6 @@ class MenuItem {
                 <div class="menu__item-cost">Цена:</div>
                 <div class="menu__item-total"><span>${this.changeToRUR()}</span> руб/день</div>
             </div>
-        </div>
         `
         this.parent.append(element);
     }
@@ -46,7 +52,8 @@ new MenuItem(
     'Меню “Премиум”',
     'В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',
     6,
-    '.menu__field .container'
+    '.menu__field .container',
+    'menu__item'
 ).render();
 
 new MenuItem(
@@ -55,5 +62,6 @@ new MenuItem(
     'Меню "Постное"',
     'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.',
     4,
-    '.menu__field .container'
+    '.menu__field .container',
+    'menu__item'
 ).render();

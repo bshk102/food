@@ -28,7 +28,7 @@ window.addEventListener('DOMContentLoaded', () => {
     showTabContent();
 
     //Timer
-    const deadline = new Date(2021, 1, 2, 13, 26),
+    const deadline = new Date(2021, 2, 1, 0, 0),
         htmlDays = document.querySelector('#days'),
         htmlHours = document.querySelector('#hours'),
         htmlMinutes = document.querySelector('#minutes'),
