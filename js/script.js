@@ -206,4 +206,8 @@ window.addEventListener('DOMContentLoaded', () => {
             closeModal();
         }, 4000);
     }
+
+    fetch('db.json')
+        .then(data => data.json())
+        .then(data => console.log(data));
 });
