@@ -147,7 +147,6 @@ window.addEventListener('DOMContentLoaded', () => {
             display: block;
             margin: 0 auto;
         `;
-        //form.append(statusMessage);
         form.insertAdjacentElement('afterend', statusMessage);
 
         let formData = new FormData(form);
@@ -155,19 +154,35 @@ window.addEventListener('DOMContentLoaded', () => {
         formData.forEach((value, key) => obj[key] = value);
         formData = JSON.stringify(obj);
 
-        const req = new XMLHttpRequest();
-        req.open('POST', 'server.php');
-        req.setRequestHeader('Content-type', 'application/json');
-        req.send(formData);
-        req.addEventListener('load', () => {
-            if (req.status === 200) {
-                showThanksModal(statusMessages.sucsess);
-                form.reset();
+        fetch('server1.php', {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: formData
+        })
+            .then(data => data.text())
+            .then(data => {
+                console.log(data);
+                showThanksModal(statusMessages.sucsess);                
                 statusMessage.remove();
-            } else {
-                showThanksModal(statusMessages.failure);
-            }
-        });
+            })
+            .catch(() => showThanksModal(statusMessages.failure))
+            .finally(() => form.reset());
+
+    //     const req = new XMLHttpRequest();
+    //     req.open('POST', 'server.php');
+    //     req.setRequestHeader('Content-type', 'application/json');
+    //     req.send(formData);
+    //     req.addEventListener('load', () => {
+    //         if (req.status === 200) {
+    //             showThanksModal(statusMessages.sucsess);
+    //             form.reset();
+    //             statusMessage.remove();
+    //         } else {
+    //             showThanksModal(statusMessages.failure);
+    //         }
+    //     });
     }));
 
     function showThanksModal(message) {
