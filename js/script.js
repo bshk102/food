@@ -282,9 +282,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const dots = [];
 
-    let slidesWidth = window.getComputedStyle(slidesWrapper).width;
-    slidesWidth = +slidesWidth.slice(0, slidesWidth.length - 2);
-
+    let slidesWidth = +window.getComputedStyle(slidesWrapper).width.replace(/\D/g, '');
+    
     const totalWidth = slidesWidth * (slides.length - 1);
 
     let offset = 0;
