@@ -275,35 +275,101 @@ window.addEventListener('DOMContentLoaded', () => {
         slidesTotal = document.querySelector('#total'),
         slidesCurrent = document.querySelector('#current'),
         slidesNext = document.querySelector('.offer__slider-next'),
-        slidesPrev = document.querySelector('.offer__slider-prev');
-    
-    slidesNext.addEventListener('click', showNextSlide);
-    slidesPrev.addEventListener('click', showPrevSlide);
+        slidesPrev = document.querySelector('.offer__slider-prev'),
+        slidesInner = document.querySelector('.offer__slider-inner'),
+        slidesWrapper = document.querySelector('.offer__slider-wrapper');
 
-    let currentSlide = 0;
+    let slidesWidth = window.getComputedStyle(slidesWrapper).width;
+    console.log(slidesWidth);
+    slidesWidth = +slidesWidth.slice(0, slidesWidth.length - 2);
+    console.log(slidesWidth);
 
-    countSlides(0);
+    const totalWidth = slidesWidth * (slides.length - 1);
 
-    function countSlides(current) {
-        slides.forEach(slide => slide.classList.add('hide'));
+    let offset = 0;
+    let slidesIndex = 0;
+
+    writeCurrentSlideNumber();
+    writeTotalSlidesNumber();
+
+    function writeTotalSlidesNumber() {
         if (slides.length < 10) {
             slidesTotal.textContent = '0' + slides.length;
-            slidesCurrent.textContent = '0' + (current + 1);
         } else {
             slidesTotal.textContent = slides.length;
-            (current + 1) < 10 ? slidesCurrent.textContent = '0' + (current + 1) : slidesCurrent.textContent = current + 1;
         }
-        slides[current].classList.remove('hide');
     }
 
-    function showNextSlide() {
-        currentSlide < slides.length - 1 ? ++currentSlide : currentSlide = 0;
-        countSlides(currentSlide);
+    function writeCurrentSlideNumber() {
+        if (slides.length < 10) {
+            slidesCurrent.textContent = '0' + (slidesIndex + 1);
+        } else {
+            slidesCurrent.textContent = slidesIndex + 1;
+        }
     }
+    
+    slidesInner.style.width = 100 * slides.length + '%';
+    slidesInner.style.display = 'flex';
+    slidesInner.style.transition = '0.5s ease';
+    slidesWrapper.style.overflow = 'hidden';
 
-    function showPrevSlide() {
-        currentSlide === 0 ? currentSlide = slides.length - 1 : --currentSlide;
-        countSlides(currentSlide);
-    }
+    slides.forEach(slide => slide.style.width = slidesWidth + 'px');
+
+    slidesNext.addEventListener('click', () => {
+        slidesIndex++;
+        if (slidesIndex === slides.length) {
+            offset = 0;
+            slidesIndex = 0;
+        } else {
+            offset += slidesWidth;
+        }
+        
+        slidesInner.style.transform = `translateX(-${offset}px)`;
+        writeCurrentSlideNumber();
+    });
+    
+    slidesPrev.addEventListener('click', () => {
+        if (offset === 0) {
+            offset = totalWidth;
+            slidesIndex = slides.length - 1;
+        } else {
+            offset -= slidesWidth;
+            slidesIndex--;
+        }
+
+        slidesInner.style.transform = `translateX(-${offset}px)`;
+        writeCurrentSlideNumber();
+    });
+
+
+
+    // slidesNext.addEventListener('click', showNextSlide);
+    // slidesPrev.addEventListener('click', showPrevSlide);
+
+    // let currentSlide = 0;
+
+    // showSlide(currentSlide);
+
+    // function showSlide(current) {
+    //     slides.forEach(slide => slide.classList.add('hide'));
+    //     if (slides.length < 10) {
+    //         slidesTotal.textContent = '0' + slides.length;
+    //         slidesCurrent.textContent = '0' + (current + 1);
+    //     } else {
+    //         slidesTotal.textContent = slides.length;
+    //         (current + 1) < 10 ? slidesCurrent.textContent = '0' + (current + 1) : slidesCurrent.textContent = current + 1;
+    //     }
+    //     slides[current].classList.remove('hide');
+    // }
+
+    // function showNextSlide() {
+    //     currentSlide < slides.length - 1 ? ++currentSlide : currentSlide = 0;
+    //     showSlide(currentSlide);
+    // }
+
+    // function showPrevSlide() {
+    //     currentSlide === 0 ? currentSlide = slides.length - 1 : --currentSlide;
+    //     showSlide(currentSlide);
+    // }
 
 });
