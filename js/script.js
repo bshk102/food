@@ -427,8 +427,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // Calories Calculator
 
-    const calcItems = document.querySelectorAll('.calculating__choose-item'),
-        calcChooseActivityFields = document.querySelector('.calculating__choose_big'),
+    const calcConstitutionInputs = document.querySelectorAll('.calculating__choose_medium input'),
+        calcChooseActivityField = document.querySelector('.calculating__choose_big'),
         calcChooseGenderField = document.querySelector('#gender'),
         calcHeight = document.querySelector('#height'),
         calcWeight = document.querySelector('#weight'),
@@ -452,9 +452,11 @@ window.addEventListener('DOMContentLoaded', () => {
     let userGender = '',
         userActivity = '';
 
+    calcResult.textContent = '';
+
     calcChooseGenderField.addEventListener('click', calcChooseOption);
-    calcChooseActivityFields.addEventListener('click', calcChooseOption);
-    calcItems.forEach(item => item.addEventListener('input', callRenderResult));
+    calcChooseActivityField.addEventListener('click', calcChooseOption);
+    calcConstitutionInputs.forEach(item => item.addEventListener('input', callRenderResult));
     
 
     function calcChooseOption(e) {
@@ -465,7 +467,7 @@ window.addEventListener('DOMContentLoaded', () => {
         }
         if (e.currentTarget === calcChooseGenderField) {
             userGender = e.target.id;
-        } else if (e.currentTarget === calcChooseActivityFields) {
+        } else if (e.currentTarget === calcChooseActivityField) {
             userActivity = e.target.dataset.ratio;
         }
         callRenderResult();
@@ -476,10 +478,14 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderResult(result) {
-        if (isNaN(result)) {
-            calcResult.textContent = '';            
+        if (checkFillingOfFields()) {
+            if (isNaN(result)) {
+                calcResult.textContent = '';
+            } else {
+                calcResult.textContent = Math.round(result);
+            }
         } else {
-            calcResult.textContent = Math.round(result);
+            calcResult.textContent = '';
         }
     }
 
@@ -489,5 +495,17 @@ window.addEventListener('DOMContentLoaded', () => {
         } else if (userGender === 'female') {
             renderResult(calcCalories(femaleRatios));
         }
+    }
+
+    function checkFillingOfFields() {
+        let filled = false;
+        let inputErrors = [];
+        calcConstitutionInputs.forEach(input => input.value === '' ? inputErrors.push('error') : true);        
+        if (inputErrors.length > 0) {
+            return false;
+        }      
+        calcChooseGenderField.querySelector('.calculating__choose-item_active') === null ? filled = false : filled = true;
+        calcChooseActivityField.querySelector('.calculating__choose-item_active') === null ? filled = false : filled = true;
+        return filled;
     }
 });
