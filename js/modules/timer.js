@@ -1,5 +1,5 @@
-function timer() {
-    const deadline = new Date(2021, 2, 1, 0, 0),
+function timer(timerSelector, timerDeadline) {
+    const deadline = new Date(timerDeadline),
         htmlDays = document.querySelector('#days'),
         htmlHours = document.querySelector('#hours'),
         htmlMinutes = document.querySelector('#minutes'),
@@ -20,7 +20,7 @@ function timer() {
     const renderTimeLeft = (timerHTML, timeLeft) => {
         if (timeLeft.timeLeft <= 0) {
             timerHTML.querySelector('.title').textContent = 'Акция завершена';
-            timerHTML.querySelector('.timer').innerHTML = '';
+            timerHTML.querySelector(timerSelector).innerHTML = '';
             clearInterval(startTimer);
         }
         htmlDays.textContent = drawZero(timeLeft.days);
@@ -39,4 +39,4 @@ function timer() {
 
 }
 
-module.exports = timer;
+export default timer;
